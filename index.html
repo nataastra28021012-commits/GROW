@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GROW — развивающий диалог</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #596579;
+      --surface: #ffffff;
+      --background: #ffffff;
+      --border: #d9e1ec;
+      --accent: #42A1A5;
+      --accent-soft: #e6f4f4;
+      --focus: #ff9e1b;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: #ffffff !important;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 32px 20px;
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .grow {
+      width: min(960px, 100%);
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: #ffffff !important;
+      box-shadow: 0 16px 36px rgba(23, 32, 51, 0.12);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .step {
+      min-height: 172px;
+      padding: 20px;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      color: var(--ink);
+      background: var(--surface);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    .step:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(66, 161, 165, 0.18);
+    }
+
+    .step:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .step.is-active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 8px 20px rgba(66, 161, 165, 0.18);
+    }
+
+    .letter {
+      display: block;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 42px;
+      line-height: .9;
+    }
+
+    .step-label {
+      display: block;
+      margin-top: 14px;
+      color: var(--ink);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .panel {
+      min-height: 220px;
+      margin-top: 28px;
+      padding: clamp(22px, 4vw, 36px);
+      border-radius: 18px;
+      background: #f4f7fb;
+    }
+
+    .placeholder {
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .content[hidden] { display: none; }
+
+    .content {
+      animation: appear .25s ease-out;
+    }
+
+    .content h2 {
+      margin: 0 0 14px;
+      font-size: 26px;
+    }
+
+    .description {
+      margin: 0 0 22px;
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .question-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    blockquote {
+      margin: 0;
+      padding: 16px 18px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      background: var(--surface);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+
+    .alternative {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .steps { grid-template-columns: 1fr; }
+      .step { min-height: auto; display: flex; align-items: center; gap: 16px; }
+      .letter { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="grow">
+    <section class="steps" aria-label="Этапы модели GROW">
+      <button class="step" type="button" data-step="goal" aria-label="Goal — Цель" aria-controls="content" aria-pressed="false">
+        <span class="letter" aria-hidden="true">G</span>
+        <span class="step-label">Goal (Цель)</span>
+      </button>
+      <button class="step" type="button" data-step="reality" aria-label="Reality — Реальность" aria-controls="content" aria-pressed="false">
+        <span class="letter" aria-hidden="true">R</span>
+        <span class="step-label">Reality (Реальность)</span>
+      </button>
+      <button class="step" type="button" data-step="options" aria-label="Options — Варианты" aria-controls="content" aria-pressed="false">
+        <span class="letter" aria-hidden="true">O</span>
+        <span class="step-label">Options (Варианты)</span>
+      </button>
+      <button class="step" type="button" data-step="will" aria-label="Will / Way forward — Намерение / План" aria-controls="content" aria-pressed="false">
+        <span class="letter" aria-hidden="true">W</span>
+        <span class="step-label">Will / Way forward<br>(Намерение / План)</span>
+      </button>
+    </section>
+
+    <section class="panel" id="content" aria-live="polite">
+      <p class="placeholder" id="placeholder"><em>Кликай на каждый шаг GROW, чтобы узнать подробнее</em></p>
+
+      <article class="content" data-content="goal" hidden>
+        <h2>G — Goal (Цель)</h2>
+        <p class="description">Поймите, к какому результату нужно прийти.</p>
+        <p class="question-label">Вопрос сотруднику</p>
+        <blockquote>«Какого идеального результата по этой задаче мы хотим достичь?»<br>или: «Что будет лучшим решением этой проблемы?»</blockquote>
+      </article>
+
+      <article class="content" data-content="reality" hidden>
+        <h2>R — Reality (Реальность)</h2>
+        <p class="description">Трезво оцените, что происходит прямо сейчас.</p>
+        <p class="question-label">Вопрос сотруднику</p>
+        <blockquote>«Какая ситуация на данный момент? Что уже сделано?<br>Какие есть сложности или ограничения?»</blockquote>
+      </article>
+
+      <article class="content" data-content="options" hidden>
+        <h2>O — Options (Варианты)</h2>
+        <p class="description">Накидайте альтернативные пути. Позвольте сотруднику включить голову.</p>
+        <p class="question-label">Вопрос сотруднику</p>
+        <blockquote>«Если бы я не мог помочь, какие 3–4 варианта решения ты бы предложил?<br>Что еще можно сделать?»</blockquote>
+      </article>
+
+      <article class="content" data-content="will" hidden>
+        <h2>W — Will / Way forward (Намерение / План)</h2>
+        <p class="description">Зафиксируйте конкретный шаг и ответственность.</p>
+        <p class="question-label">Вопрос сотруднику</p>
+        <blockquote>«Какой из вариантов ты выберешь? Каков твой первый шаг?<br>Какая помощь от меня тебе нужна?»</blockquote>
+      </article>
+    </section>
+
+  </main>
+
+  <script>
+    // Переключение между этапами GROW и их содержанием.
+    const buttons = document.querySelectorAll('.step');
+    const contents = document.querySelectorAll('.content');
+    const placeholder = document.getElementById('placeholder');
+
+    function showStep(step) {
+      buttons.forEach((button) => {
+        const active = button.dataset.step === step;
+        button.classList.toggle('is-active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      contents.forEach((content) => {
+        content.hidden = content.dataset.content !== step;
+      });
+
+      placeholder.hidden = true;
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => showStep(button.dataset.step));
+    });
+
+  </script>
+</body>
+</html>
